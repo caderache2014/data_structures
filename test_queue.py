@@ -16,11 +16,11 @@ def test_enqueue():
 
     with pytest.raises(Exception) as dequeue_empty:
         test.dequeue()
-    assert dequeue_empty.value.message == 'Empty Queue'
+    assert dequeue_empty.value.message == 'Empty Queue!'
 
 def test_dequeue():
     with pytest.raises(Exception) as dequeue_empty:
         test = q.queue()
         test.dequeue()
     #import pdb; pdb.set_trace()      
-    assert dequeue_empty.value.message == 'Empty Queue'
+    assert dequeue_empty.value.message == 'Empty Queue!'
