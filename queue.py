@@ -15,7 +15,7 @@ class queue():
 
     def dequeue(self):
         if self.size() == 0:
-            raise Exception('Empty Queue')
+            raise Exception('Empty Queue!!')
         remove_item = self.head
         if not remove_item.next:
             data = remove_item.data
