@@ -66,4 +66,3 @@ class linked_list:
 
 
         
->>>>>>> 54b0d737fa122a85ec5c9671de400746bca7145d
