@@ -19,10 +19,10 @@ def test_push():
 
 def test_pop():
     test = h.min_heap()
-    test.push(1)
+    test.push(100)
     test.push(30)
     test.push(29)
-    test.push(100)
+    test.push(1)
 
     assert test.pop() == 1
     assert test.pop() == 29
