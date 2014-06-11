@@ -65,3 +65,7 @@ class linked_list:
                 runnerNext = runnerNext.next
 
 
+<<<<<<< HEAD
+        
+=======
+>>>>>>> 6c27d782c65f52eb20e9ed84d16d8f6bbb157f5d
