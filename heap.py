@@ -10,7 +10,6 @@ class min_heap(object):
                 self.heap_list[i], self.heap_list[parent_node] = self.heap_list[parent_node], self.heap_list[i]
             i = max(parent_node,0)
             parent_node = (i-1)//2
-            print i
             if i == 0:
                 break
 
@@ -24,8 +23,9 @@ class min_heap(object):
             raise IndexError
         returnval = self.heap_list[0]
         self.heap_list[0] = self.heap_list[self.size-1]
-        self.size -= 1
         self.organize_down()
+        self.size -= 1
+        self.heap_list.pop(-1)
         return returnval
 
     def organize_down(self):
