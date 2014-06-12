@@ -3,11 +3,13 @@ class min_heap(object):
         self.heap_list = []
         self.size = 0
 
-    def organize_up(self,i):          
+    def organize_up(self,i):   
+        parent_node = (i-1)//2
         while True:
-            if self.heap_list[i] < self.heap_list[(i-1)//2]:
-                self.heap_list[i], self.heap_list[(i-1)//2] = self.heap_list[(i-1)//2], self.heap_list[i]
-            i = max((i-1)//2,0)
+            if self.heap_list[i] < self.heap_list[parent_node]:
+                self.heap_list[i], self.heap_list[parent_node] = self.heap_list[parent_node], self.heap_list[i]
+            i = max(parent_node,0)
+            parent_node = (i-1)//2
             print i
             if i == 0:
                 break
@@ -28,20 +30,24 @@ class min_heap(object):
 
     def organize_down(self):
         i = 0
+        left_child = (i+1)*2-1
+        right_child = (i+1)*2
         if self.size == 1:
             return
         if self.size == 2:
             child_swap = 1
         else:                 
             while True:
-                if self.heap_list[(i+1)*2-1]<=self.heap_list[(i+1)*2]:
-                    child_swap = (i+1)*2-1
+                if self.heap_list[left_child]<=self.heap_list[right_child]:
+                    child_swap = left_child
                 else:
-                    child_swap = (i+1)*2
+                    child_swap = right_child
                 if self.heap_list[i] > self.heap_list[child_swap]:
                     self.heap_list[i], self.heap_list[child_swap] = self.heap_list[child_swap], self.heap_list[i]
                 i=child_swap
-                if (i+1)*2>=self.size-1:
+                left_child = (i+1)*2-1
+                right_child = (i+1)*2
+                if right_child>=self.size-1:
                     break
 
 
