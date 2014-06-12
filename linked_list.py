@@ -64,4 +64,3 @@ class linked_list:
                 runner = runner.next
                 runnerNext = runnerNext.next
 
-
