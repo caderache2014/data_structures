@@ -4,18 +4,13 @@ class min_heap(object):
         self.size = 0
 
     def organize_up(self,i):          
-        while (i-1)//2>0:
+        while True:
             if self.heap_list[i] < self.heap_list[(i-1)//2]:
-                temp = self.heap_list[i]
-                self.heap_list[i] = self.heap_list[(i-1)//2]
-                self.heap_list[(i-1)//2] = temp
-            i = (i-1)//2
-
-        if i<=2:
-            if self.heap_list[i] < self.heap_list[0]:
-                temp = self.heap_list[i]
-                self.heap_list[i] = self.heap_list[0]
-                self.heap_list[0] = temp
+                self.heap_list[i], self.heap_list[(i-1)//2] = self.heap_list[(i-1)//2], self.heap_list[i]
+            i = max((i-1)//2,0)
+            print i
+            if i == 0:
+                break
 
     def push(self, val):
         self.heap_list.append(val)
@@ -37,26 +32,17 @@ class min_heap(object):
             return
         if self.size == 2:
             child_swap = 1
-        else:
-            if self.heap_list[1]<=self.heap_list[2]:
-                child_swap = 1
-            else:
-                child_swap = 2
-        if self.heap_list[0]>self.heap_list[child_swap]:
-            temp = self.heap_list[0]
-            self.heap_list[0] = self.heap_list[child_swap]
-            self.heap_list[child_swap] = temp
-        i = child_swap
-                    
-        while i*2+1<self.size:
-            if self.heap_list[(i+1)*2-1]<=self.heap_list[(i+1)*2]:
-                child_swap = (i+1)*2-1
-            else:
-                child_swap = (i+1)*2
-            if self.heap_list[i] > self.heap_list[child_swap]:
-                temp = self.heap_list[i]
-                self.heap_list[i] = self.heap_list[child_swap]
-                self.heap_list[child_swap] = temp
-            i=child_swap
-   
+        else:                 
+            while True:
+                if self.heap_list[(i+1)*2-1]<=self.heap_list[(i+1)*2]:
+                    child_swap = (i+1)*2-1
+                else:
+                    child_swap = (i+1)*2
+                if self.heap_list[i] > self.heap_list[child_swap]:
+                    self.heap_list[i], self.heap_list[child_swap] = self.heap_list[child_swap], self.heap_list[i]
+                i=child_swap
+                if (i+1)*2>=self.size-1:
+                    break
+
+
         
