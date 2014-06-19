@@ -24,9 +24,9 @@ def test_edges():
     test.add_edge('node1','node2')
     test.add_edge('node1','node3')
     test.add_edge('node2','node3')
-    assert set(test.edges()) == set([tuple(sorted(['node1','node2'])),
-                                tuple(sorted(['node1','node3'])),
-                                tuple(sorted(['node2','node3']))])
+    assert test.edges() == set([frozenset(['node1','node2']),
+                                frozenset(['node1','node3']),
+                                frozenset(['node2','node3'])])
 
 def test_del_node():
     test = g.graph('graph')
@@ -39,7 +39,7 @@ def test_del_node():
     assert 'node2' in test.node_dict
     assert 'node4' in test.node_dict
     assert len(test.node_dict) == 3
-    assert set(test.edges()) == set([tuple(sorted(['node1','node2']))])
+    assert test.edges() == set([frozenset(['node1','node2'])])
     with pytest.raises(ValueError):
         test.del_node('node3')
     

@@ -24,7 +24,7 @@ class graph_node(object):
     
 class graph_edge(object):
     def __init__(self, node1, node2):
-        self.end_points = tuple(sorted([node1.name,node2.name]))
+        self.end_points = frozenset([node1.name,node2.name])
 
 class graph(object):
     def __init__(self, name):
@@ -39,7 +39,7 @@ class graph(object):
         for keys in self.node_dict:
             for edge in self.node_dict[keys].edge_list:
                 edge_list.append(edge.end_points)
-        return list(set(edge_list))
+        return set(edge_list)
 
     def add_node(self, n):
         if self.has_node(n):
@@ -47,14 +47,11 @@ class graph(object):
         self.node_dict[n]=graph_node(n)
 
     def add_edge(self,n1,n2):
-        if self.has_node(n1) and self.has_node(n2):
-            self._attach_edge(n1,n2)
-            return
-        elif self.has_node(n1):
+        if self.has_node(n1) and not self.has_node(n2):
             self.node_dict[n2] = graph_node(n2)
-        elif self.has_node(n2):
+        elif self.has_node(n2) and not self.has_node(n1):
             self.node_dict[n1] = graph_node(n1)
-        else:
+        elif not self.has_node(n1):
             self.node_dict[n2] = graph_node(n2)
             self.node_dict[n1] = graph_node(n1)
         self._attach_edge(n1,n2)
