@@ -67,4 +67,41 @@ def test_adjacent():
     assert not test.adjacent('node2','node3')
     with pytest.raises(ValueError):
         test.adjacent('node1','node4')
+
+def test_depth_first_traversal():
+    test = g.graph('graph')
+    test.add_edge('node1','node2')
+    test.add_edge('node1','node5')
+    test.add_edge('node2','node3')
+    test.add_edge('node2','node4')
+    test.add_edge('node4','node6')
+    test.depth_first_traversal('node1')
+    assert test.path == ['node1','node2','node3','node4','node6','node5']
+    test = g.graph('graph1')
+    test.add_edge('node1','node2')
+    test.add_edge('node1','node5')
+    test.add_edge('node2','node3')
+    test.add_edge('node2','node4')
+    test.add_edge('node4','node6')
+    test.depth_first_traversal('node4')
+    assert test.path == ['node4','node2','node1','node5','node3','node6']
+
+def test_breadth_first_traveral():
+    test = g.graph('graph')
+    test.add_edge('node1','node2')
+    test.add_edge('node1','node5')
+    test.add_edge('node2','node3')
+    test.add_edge('node2','node4')
+    test.add_edge('node4','node6')
+    test.breadth_first_traversal('node1')
+    assert test.path == ['node1','node2','node5','node3','node4','node6']
+    test = g.graph('graph1')
+    test.add_edge('node1','node2')
+    test.add_edge('node1','node5')
+    test.add_edge('node2','node3')
+    test.add_edge('node2','node4')
+    test.add_edge('node4','node6')
+    test.breadth_first_traversal('node4')
+    assert test.path == ['node4','node2','node6','node1','node3','node5']
+
                                

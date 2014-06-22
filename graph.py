@@ -1,10 +1,12 @@
 from functools import total_ordering
+import time
 
 @total_ordering
 class graph_node(object):
     def __init__(self, name):
         self.name = name
         self.edge_list = []
+        self.visited = False
         
     def add_node_edge(self, *edges):
         for item in edges:
@@ -30,6 +32,7 @@ class graph(object):
     def __init__(self, name):
         self.name = name
         self.node_dict = {}
+        self.path = []
 
     def nodes(self):
         return list(self.node_dict.keys())
@@ -115,18 +118,53 @@ class graph(object):
         self.node_dict[n1].add_node_edge(new_edge)
         self.node_dict[n2].add_node_edge(new_edge)
 
+
+    def depth_first_traversal(self, start):
+        if not self.has_node(start):
+            raise ValueError
+        if self.node_dict[start].visited == False:
+            self.path.append(start)
+            self.node_dict[start].visited = True
+        for neighbor in self.neighbors(start):
+            if neighbor not in self.path:
+                self.depth_first_traversal(neighbor)
+        return
+        
+    def breadth_first_traversal(self, start):
+        if not self.has_node(start):
+            raise ValueError
+        layer = [start]
+        self.path.append(start)
+        while True:
+            #time.sleep(2)
+            holder = layer.pop(0)
+            for neighbor in self.neighbors(holder):
+                if neighbor not in self.path:
+                    layer.append(neighbor)
+                    self.path.append(neighbor)
+            print 'layer: '+''.join(layer)
+            print 'path: '+''.join(self.path)
+            if len(layer)==0:
+                break
+        return
+        
+            
+        
+            
+            
+
 if __name__ == '__main__':
     g = graph('graph')
     g.add_node('node1')
-    print g.nodes()
-    print g.edges()
     g.add_edge('node1','node2')
-    g.add_edge('node1','node3')
     g.add_edge('node2','node3')
+    g.add_edge('node2','node4')
+    g.add_edge('node1','node5')
+    g.add_edge('node4','node6')
     print g.nodes()
     print g.edges()
-    g.del_node('node3')
-    print g.edges()
-    print g.neighbors('node1')
+    #g.depth_first_traversal('node4')
+    g.breadth_first_traversal('node4')
+    print g.path
     
     
