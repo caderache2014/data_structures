@@ -49,6 +49,9 @@ class min_heap(object):
                 right_child = (i+1)*2
                 if right_child>=self.size-1:
                     break
+    
+    def peek(self):
+        return self.heap_list[0]
 
 
         
