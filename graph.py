@@ -121,6 +121,7 @@ class graph(object):
 
 
     def depth_first_traversal(self, start):
+        self.path = []
         if not self.has_node(start):
             raise ValueError
         if self.node_dict[start].visited == False:
@@ -134,6 +135,7 @@ class graph(object):
             return
         
     def breadth_first_traversal(self, start):
+        self.path = []
         if not self.has_node(start):
             raise ValueError
         layer = [start]
@@ -147,8 +149,6 @@ class graph(object):
                         if neighbor not in self.path:
                             layer.append(neighbor)
                             self.path.append(neighbor)
-                    print 'layer: '+''.join(layer)
-                    print 'path: '+''.join(self.path)
                 if len(layer)==0:
                     break
             except:
@@ -156,27 +156,138 @@ class graph(object):
                 raise ValueError
         return
         
+    def shortest_path_djikstra(self, n1, n2):
+        self.breadth_first_traversal(n1)
+        if n2 not in self.path:
+            print 'Cannot traverse'
+        else:
+            node_dict_distance = {}
+            node_dict_previous = {}
+            for node in self.node_dict:
+                if node != n1:
+                    node_dict_distance[node] = float('inf')
+            node_dict_distance[n1] = 0
+            list_holder = self.path
             
-        
-            
+            while list_holder:
+                curr_node = list_holder.pop(0)
+                if self.neighbors(curr_node):
+                    for neighbor in self.neighbors(curr_node):
+                        if neighbor in list_holder:
+                            distance_check = self.find_edge_weight(curr_node,neighbor)+node_dict_distance[curr_node]
+                            if distance_check < node_dict_distance[neighbor]:
+                                node_dict_distance[neighbor] = distance_check
+                                node_dict_previous[neighbor] = curr_node
+
+            prev_list = [n2]
+            prev_node = n2
+            while True:
+                prev_node = node_dict_previous[prev_node]
+                prev_list.insert(0,prev_node)
+                if prev_node == n1:
+                    break
+            return prev_list, node_dict_distance[n2]          
+
+    def shortest_path_bellman_ford(self, n1, n2):
+        self.breadth_first_traversal(n1)
+        if n2 not in self.path:
+            print 'Cannot traverse'
+        else:
+            node_dict_distance = {}
+            node_dict_previous = {}
+            for node in self.node_dict:
+                if node != n1:
+                    node_dict_distance[node] = float('inf')
+            node_dict_distance[n1] = 0
+            list_holder = self.path
+            load_list = [n1]
+            master_list = []
+
+            for i in range(len(self.node_dict)):
+                for node in master_list:
+                    curr_node = node
+                    #print curr_node
+                    if self.neighbors(curr_node):
+                        for neighbor in self.neighbors(curr_node):
+                            if neighbor in list_holder:
+                                distance_check = self.find_edge_weight(curr_node,neighbor)+node_dict_distance[curr_node]
+                                #print curr_node
+                                #print self.find_edge_weight(curr_node,neighbor)
+                                #print node_dict_distance[curr_node]
+                                if distance_check < node_dict_distance[neighbor]:
+                                    node_dict_distance[neighbor] = distance_check
+                                    node_dict_previous[neighbor] = curr_node
+                curr_length = len(load_list)
+                for i in range(curr_length):
+                    print load_list
+                    if load_list[0] not in master_list:
+                        master_list.append(load_list.pop(0))
+                    if self.neighbors(master_list[-1]):
+                        for neighbor in self.neighbors(master_list[-1]):
+                            if neighbor not in load_list:
+                                load_list.append(neighbor)
+
+            for node in master_list:
+                curr_node = node
+                if self.neighbors(curr_node):
+                    for neighbor in self.neighbors(curr_node):
+                        if neighbor in list_holder:
+                            distance_check = self.find_edge_weight(curr_node,neighbor)+node_dict_distance[curr_node]
+                            if distance_check < node_dict_distance[neighbor]:
+                                print 'Graph contains negative cycle'
+                                raise ValueError
+
+            prev_list = [n2]
+            prev_node = n2
+            while True:
+                prev_node = node_dict_previous[prev_node]
+                prev_list.insert(0,prev_node)
+                if prev_node == n1:
+                    break
+            return prev_list, node_dict_distance[n2]  
+                                   
+    def find_edge_weight(self,n1,n2):
+        for index, item in enumerate(self.node_dict[n1].edge_list):
+            if item.end_points == [n1,n2]:
+                break
+        return item.weight
             
 
 if __name__ == '__main__':
     g = graph('graph')
     g.add_node('node1')
-    g.add_edge('node1','node2')
-    g.add_edge('node2','node3')
-    g.add_edge('node2','node4')
-    g.add_edge('node1','node5')
-    g.add_edge('node4','node6')
-    print g.nodes()
-    print g.edges()
-    for node in g.node_dict:
-        print node
-        for edge in g.node_dict[node].edge_list:
-            print edge.end_points
+    g.add_edge('node1','node2',1)
+    g.add_edge('node2','node3',1)
+    g.add_edge('node2','node4',2)
+    g.add_edge('node1','node5',2)
+    g.add_edge('node4','node6',1)
+    g.add_edge('node5','node6',8)
+
+    #print g.shortest_path_djikstra('node1','node6')
+    print g.shortest_path_bellman_ford('node1','node6')
+
+    g2 = graph('graph')
+    g2.add_edge('node1','node2',1)
+    g2.add_edge('node1','node3',3)
+    g2.add_edge('node2','node4',1)
+    g2.add_edge('node3','node4',-10)
+    g2.add_edge('node4','node5',1)
+
+    #create negative loop
+    #g2.add_edge('node4','node2',1)
+    #g2.add_edge('node2','node1',1)
+
+    print g2.shortest_path_bellman_ford('node1','node5')
+
+
+    #print g.nodes()
+    #print g.edges()
+    #for node in g.node_dict:
+    #    print node
+    #    for edge in g.node_dict[node].edge_list:
+    #        print edge.end_points
     #g.depth_first_traversal('node1')
-    g.breadth_first_traversal('node1')
-    print g.path
+    #g.breadth_first_traversal('node1')
+    #print g.path
     
     
