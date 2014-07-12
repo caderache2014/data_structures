@@ -30,4 +30,16 @@ def test_pop():
     assert test.pop() == 100
     with pytest.raises(IndexError):
         test.pop()
-    
+  
+def test_pop_and_push():
+    test = h.min_heap()
+    test.push(100)
+    x = test.pop()
+    assert x == 100
+    test.push(x)
+    assert test.heap_list[0] == x
+
+def test_pop_empty_list():
+    test = h.min_heap()
+    x = test.pop()
+    assert x == None
